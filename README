@@ -1,0 +1,66 @@
+Replication instructions :
+
+All experiments were tested using the 12.04 AMI provided by the course staff situated on the Oregon Amazon Web Clusters. If you are using it, please disable MPTCP and DTCP using the following commands :
+
+sudo sysctl -w net.ipv4.tcp_dctcp_enable=0
+sudo sysctl -w net.ipv4.tcp_ecn=0
+sudo sysctl -w net.mptcp.mptcp_enabled=0
+
+Please download and install the pox controller and riplpox module as follows:
+
+== Install ==
+RipL, POX, and setuptools are the dependencies.
+
+# Build RipL:
+sudo apt-get install -y python-setuptools
+git clone git://github.com/brandonheller/ripl.git
+cd ripl
+sudo python setup.py develop
+
+# Building Ripcord-POX
+cd ~/
+git clone git://github.com/brandonheller/riplpox.git
+cd riplpox
+sudo python setup.py develop
+
+# Building POX:
+cd ~/
+git clone git://github.com/noxrepo/pox.git
+
+== Running on POX ==
+
+
+
+The main file that contains our code is “cs244-12-dc”. We have  modified riplpox to make it consistent with the DCell. Moreover there are also scripts that runs the experiments. There are also scripts in utility folder for plotting the figures. 
+
+Please replace the old riplpox module with ours:
+
+cd ~/cs244-12-dc
+mv riplpox.py ~/riplpox/riplpox/riplpox.py
+
+ 
+1) Part one - Link and node failures:
+
+- run the script sudo ./dcell-exp1 in a window. Mininet will set up a topology and will then ask you to press return when all the switches have been connected. DO NOT PRESS IT RIGHT NOW !
+
+- open a new window and enter ~/pox/pox.py riplpox.riplpox . The controller should detect all the switches. When it is done, a message will appear saying “Woo all switches are up”.
+
+- when you see this message, go back to the experiment window and press enter. Wait for the experiment to complete. It should take around three minutes.
+
+- The result is saved as “rate.png” in the created folder.
+
+2) Part two - DCell versus Tree rates:
+
+- run the script sudo ./dcell-exp2 in a window. Mininet will set up a topology and will then ask you to press return when all the switches have been connected. DO NOT PRESS IT RIGHT NOW !
+
+- open a new window and enter ~/pox/pox.py riplpox.riplpox . The controller should detect all the switches. When it is done, a message will appear saying “Woo all switches are up”.
+
+- when you see this message, go back to the experiment window and press enter. Wait for the DCell experiment to complete. It should take around seven minutes. Then, it will ask you to press return after terminating the controller. DO NOT PRESS RETURN RIGHT NOW !
+
+- Now, in the controller window press control-D to terminate the process. Wait for it to go down.
+
+- Then, in the experiment window press return and wait for the experiment to be completed. It will take about another 14 minutes.
+
+- You should see the results in created plotresults-* folder saved as “rate.png”. 
+
+Note: Please be patient. It takes some time for the experiment to be completed. Moreover if you see errors about tcp_probe, do not panic as it is NOT a bad sign.
